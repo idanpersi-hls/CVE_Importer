@@ -90,24 +90,24 @@ jobs:
             --return-error="false"
             --ignore "**/tests/**, **/docker-compose.yml"
         
-      - name: Upload Horusec Report
+      - name: Upload Horusec Result
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: horusec-security-report
+          name: horusec-security-result
           path: horusec-result.json
 
       - name: Check Horusec Severity Threshold
         run: |
-          CRITICAL=$(jq '.analysisVulnerabilities | map(select(.severity == "CRITICAL")) | length' horusec-report.json)
-          HIGH=$(jq '.analysisVulnerabilities | map(select(.severity == "HIGH")) | length' horusec-report.json)
+          CRITICAL=$(jq '.analysisVulnerabilities | map(select(.severity == "CRITICAL")) | length' horusec-result.json)
+          HIGH=$(jq '.analysisVulnerabilities | map(select(.severity == "HIGH")) | length' horusec-result.json)
           
           echo " Security Scan Results:"
           echo " Critical: $CRITICAL"
           echo " High: $HIGH"
 
           if [ "$CRITICAL" -gt 0 ]; then
-            echo "Critical vulnerabilities found! Review horusec-report.json"
+            echo "Critical vulnerabilities found! Review horusec-result.json"
             exit 1
           fi
 
