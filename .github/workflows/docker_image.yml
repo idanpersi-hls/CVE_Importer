@@ -23,7 +23,7 @@ jobs:
         env:
           POSTGRES_DB: cve_db
           POSTGRES_USER: cve_user
-          POSTGRES_PASSWORD: test_password
+          POSTGRES_PASSWORD: 123456
         ports:
           - 5432:5432
         options: >-
@@ -54,7 +54,7 @@ jobs:
           DB_PORT=5432
           DB_NAME=cve_db
           DB_USER=cve_user
-          DB_PASSWORD=test_password
+          DB_PASSWORD=123456
           NVD_API_URL=https://services.nvd.nist.gov/rest/json/cves/2.0
           CYCLE_DAYS=120
           RESULTS_PER_PAGE=2000
