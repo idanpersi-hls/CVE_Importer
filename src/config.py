@@ -10,7 +10,6 @@ DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME", "cve_db")
 NVD_API_URL = os.getenv("NVD_API_URL", "https://services.nvd.nist.gov/rest/json/cves/2.0")
-NVD_API_KEY = os.getenv("NVD_API_KEY", "")
 START_DATE = os.getenv("START_DATE")
 DB_URL = os.getenv("DB_URL")
 

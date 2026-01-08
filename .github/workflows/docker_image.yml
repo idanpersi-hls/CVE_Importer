@@ -69,3 +69,43 @@ jobs:
       - name: Run pytest
         run: |
           pytest -v
+   
+  sast:
+    name: SAST Scan with Horusec
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Horusec Security Scan
+        id: horusec-scan
+        uses: fike/horusec-action@v0.2.2
+        with:
+          arguments: >
+            -p ./
+            --output-format "json"
+            --json-output-file horusec-result.json
+            --return-error="false"
+            --ignore "**/tests/**, **/docker-compose.yml"
+        
+      - name: Upload Horusec Result
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: horusec-security-result
+          path: horusec-result.json
+
+      - name: Check Horusec Severity Threshold
+        run: |
+          CRITICAL=$(jq '[
+            (.analysisVulnerabilities // .vulnerabilities // []) | .[] 
+            | select(.severity == "CRITICAL")] | length' horusec-result.json)
+
+          echo " Critical: $CRITICAL"
+
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "Critical vulnerabilities found! Review horusec-result.json"
+            exit 1
+          fi
