@@ -36,7 +36,6 @@ def fetch_cves(
                 backoff = BACKOFF_FACTOR * (2 ** (attempt - 1))
                 time.sleep(backoff)
                 continue
-            print(resp.url)
             resp.raise_for_status()
             time.sleep(SLEEP_SECONDS)
             return resp.json()
