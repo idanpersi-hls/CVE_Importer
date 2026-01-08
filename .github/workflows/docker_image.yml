@@ -99,18 +99,13 @@ jobs:
 
       - name: Check Horusec Severity Threshold
         run: |
-          CRITICAL=$(jq '.analysisVulnerabilities | map(select(.severity == "CRITICAL")) | length' horusec-result.json)
-          HIGH=$(jq '.analysisVulnerabilities | map(select(.severity == "HIGH")) | length' horusec-result.json)
-          
-          echo " Security Scan Results:"
+          CRITICAL=$(jq '[
+            (.analysisVulnerabilities // .vulnerabilities // []) | .[] 
+            | select(.severity == "CRITICAL")] | length' horusec-result.json)
+
           echo " Critical: $CRITICAL"
-          echo " High: $HIGH"
 
           if [ "$CRITICAL" -gt 0 ]; then
             echo "Critical vulnerabilities found! Review horusec-result.json"
             exit 1
-          fi
-
-          if [ "$HIGH" -gt 0 ]; then
-            echo "High severity vulnerabilities found. Consider fixing them."
           fi
