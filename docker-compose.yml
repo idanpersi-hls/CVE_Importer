@@ -4,14 +4,10 @@ services:
     image: cve_importer_app:latest
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
-      - DB_URL=postgresql://cve_user:${DB_PASSWORD}@db:5432/cve_db
       - DB_HOST=db
-      - DB_NAME=cve_db
-      - DB_USER=cve_user
-      - DB_PASSWORD=${DB_PASSWORD}
-      - NVD_API_URL=${NVD_API_URL} 
-      - START_DATE=${START_DATE}
     command: python -m src.main
     volumes:
       - .:/app  
@@ -21,12 +17,10 @@ services:
     image: cve_importer_app:latest
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
-      - DB_URL=postgresql://cve_user:${DB_PASSWORD}@db:5432/cve_db
       - DB_HOST=db
-      - DB_NAME=cve_db
-      - DB_USER=cve_user
-      - DB_PASSWORD=${DB_PASSWORD}
     command: uvicorn src.api.api:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
@@ -36,10 +30,8 @@ services:
   db:
     image: postgres:15
     restart: always
-    environment:
-      - POSTGRES_DB=cve_db
-      - POSTGRES_USER=cve_user
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
