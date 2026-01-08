@@ -4,6 +4,5 @@ logs/
 */*.log
 .venv/
 cron_docker_options/
-__pycache__/
-*/__pycache__/
-*/*/__pycache__/
+**/__pycache__/
+.pytest_cache/

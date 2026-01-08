@@ -69,3 +69,24 @@ jobs:
       - name: Run pytest
         run: |
           pytest -v
+   
+  sast:
+    name: SAST Scan with Horusec
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Horusec Security Scan
+        id: horusec-scan
+        uses: fike/horusec-action@v0.2.2
+        with:
+          arguments: >
+            -p ./
+            --workspace-path ./
+            --log-level ERROR
+            --output-format "json"
+            --exit-code 0
+            --ignore "**/tests/**"
