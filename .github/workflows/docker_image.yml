@@ -117,10 +117,6 @@ jobs:
     needs: [test, sast]
     if: success()
     
-    permissions:
-      contents: read
-      packages: write
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
