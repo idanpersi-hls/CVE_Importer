@@ -86,4 +86,5 @@ jobs:
           arguments: >
             -p ./
             --output-format "json"
+            --json-output-file horusec-result.json
             --ignore "**/tests/**"
