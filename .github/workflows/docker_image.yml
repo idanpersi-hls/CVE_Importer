@@ -12,6 +12,12 @@ env:
   PYTHON_VERSION: '3.11'
   IMAGE_NAME: ${{ github.repository }}
 
+  DB_HOST: localhost
+  DB_PORT: 5432
+  DB_NAME: test_cve_db
+  DB_USER: test_cve_user
+  DB_PASSWORD: 123456
+
 jobs:
   test:
     name: Run Tests
@@ -21,9 +27,9 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_DB: cve_db
-          POSTGRES_USER: cve_user
-          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: ${{ env.DB_NAME }}
+          POSTGRES_USER: ${{ env.DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
@@ -50,11 +56,11 @@ jobs:
       - name: Create test environment file
         run: |
           cat > .env << EOF
-          DB_HOST=localhost
-          DB_PORT=5432
-          DB_NAME=cve_db
-          DB_USER=cve_user
-          DB_PASSWORD=123456
+          DB_HOST=${{ env.DB_HOST }}
+          DB_PORT=${{ env.DB_PORT }}
+          DB_NAME=${{ env.DB_NAME }}
+          DB_USER=${{ env.DB_USER }}
+          DB_PASSWORD=${{ env.DB_PASSWORD }}
           NVD_API_URL=https://services.nvd.nist.gov/rest/json/cves/2.0
           CYCLE_DAYS=120
           RESULTS_PER_PAGE=2000
