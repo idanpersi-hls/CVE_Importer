@@ -87,7 +87,6 @@ jobs:
             -p ./
             --output-format "json"
             --json-output-file horusec-result.json
-            --disable-docker="false"
             --return-error="false"
             --ignore "**/tests/**, **/docker-compose.yml"
         
