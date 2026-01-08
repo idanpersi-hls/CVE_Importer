@@ -87,6 +87,9 @@ jobs:
             -p ./
             --output-format "json"
             --json-output-file horusec-result.json
+            --enable-git-history="true"
+            --disable-docker="false"
+            --return-error="false"
             --ignore "**/tests/**, **/docker-compose.yml"
         
       - name: Upload Horusec Report
@@ -95,3 +98,21 @@ jobs:
         with:
           name: horusec-security-report
           path: horusec-result.json
+
+      - name: Check Horusec Severity Threshold
+        run: |
+          CRITICAL=$(jq '.analysisVulnerabilities | map(select(.severity == "CRITICAL")) | length' horusec-report.json)
+          HIGH=$(jq '.analysisVulnerabilities | map(select(.severity == "HIGH")) | length' horusec-report.json)
+          
+          echo " Security Scan Results:"
+          echo " Critical: $CRITICAL"
+          echo " High: $HIGH"
+
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "Critical vulnerabilities found! Review horusec-report.json"
+            exit 1
+          fi
+
+          if [ "$HIGH" -gt 0 ]; then
+            echo "High severity vulnerabilities found. Consider fixing them."
+          fi
