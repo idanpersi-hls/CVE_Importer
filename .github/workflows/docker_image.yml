@@ -85,8 +85,5 @@ jobs:
         with:
           arguments: >
             -p ./
-            --workspace-path ./
-            --log-level ERROR
             --output-format "json"
-            --exit-code 0
             --ignore "**/tests/**"
