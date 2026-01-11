@@ -164,4 +164,4 @@ jobs:
         run: | 
           docker run --rm \
           -e SMOKE_TEST=true \
-          cve-importer:pr-${{ github.event.pull_request.number }}
+          ${{ secrets.DOCKERHUB_USER }}/cve-importer:pr-${{ github.event.pull_request.number }}
