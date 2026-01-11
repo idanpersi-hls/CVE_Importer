@@ -138,9 +138,4 @@ jobs:
         run: | 
           docker run --rm \
           -e SMOKE_TEST=true \
-          -e DB_HOST=${{ env.TEST_DB_HOST }} \
-          -e DB_NAME=${{ env.TEST_DB_NAME }} \
-          -e DB_USER=${{ env.TEST_DB_USER }} \
-          -e DB_PASSWORD=${{ env.TEST_DB_PASSWORD }} \
-          -e START_DATE=2024-01-01 \
           cve-importer:test-${{ github.sha }}

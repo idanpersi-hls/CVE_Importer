@@ -40,13 +40,7 @@ def load_by_dates(pubStartDate: str) -> str:
     return pubEndDate
 
 def run(start_date: str | None = None) -> None:
-    if not start_date:
-        raise ValueError("START_DATE must be set in configuration")
-    if os.getenv("SMOKE_TEST")=="true":
-        print("smoke test succesfull")
-        sys.exit(0)
-    else:
-        init_db()
+    init_db()
     try:
         num_cycles = cycles_to_wanted_date(start_date, now_utc_iso())
         current_start = start_date

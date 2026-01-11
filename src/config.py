@@ -5,12 +5,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DB_USER = os.getenv("DB_USER", "cve_user")
-DB_PASSWORD = quote_plus(os.getenv("DB_PASSWORD", "password"))
+DB_PASSWORD = quote_plus(os.getenv("DB_PASSWORD", "123456"))
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME", "cve_db")
 NVD_API_URL = os.getenv("NVD_API_URL", "https://services.nvd.nist.gov/rest/json/cves/2.0")
-START_DATE = os.getenv("START_DATE")
+START_DATE = os.getenv("START_DATE", "2025-06-01T00:00:00+00:00")
 DB_URL = os.getenv("DB_URL")
 
 CYCLE_DAYS = int(os.getenv("CYCLE_DAYS", "120"))
