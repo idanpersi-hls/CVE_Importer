@@ -4,7 +4,6 @@ from src.nvd_client import fetch_cves
 from src.normalize import format_cve
 from src.sql_db import upsert_cves, init_db, close_connection_pool
 from src.config import RESULTS_PER_PAGE, START_DATE
-import os, sys
 
 def load_to_db(vuln_list: List[Dict]) -> None:
     normalized = {}
@@ -40,6 +39,8 @@ def load_by_dates(pubStartDate: str) -> str:
     return pubEndDate
 
 def run(start_date: str | None = None) -> None:
+    if not start_date:
+        raise ValueError("START_DATE must be set in configuration")
     init_db()
     try:
         num_cycles = cycles_to_wanted_date(start_date, now_utc_iso())
