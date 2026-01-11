@@ -15,6 +15,7 @@ env:
   TEST_DB_NAME: test_cve_db
   TEST_DB_USER: test_cve_user
   TEST_DB_PASSWORD: 123456
+  DOCKERHUB_REPO: ${{ secrets.DOCKERHUB_USER }}/cve-importer
 
 jobs:
   test:
@@ -140,12 +141,13 @@ jobs:
           context: .
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           load: ${{ github.event_name == 'pull_request' }}
-          tags: cve-importer:${{ github.ref_name }}-${{ github.run_id }}
+          tags: ${{ env.DOCKERHUB_REPO }}:${{ github.ref_name }}-${{ github.run_id }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
 
-      - name: smoke test docker image 
+      - name: smoke test docker image
+        if: github.event_name == 'pull_request'
         run: | 
           docker run --rm \
           -e SMOKE_TEST=true \
