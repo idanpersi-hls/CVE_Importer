@@ -1,5 +1,9 @@
 version: 0.2
 
+env:
+secrets-manager:
+  AWS_ACCOUNT_ID: idanpersi-skills-cve-etl-accountID:AWS_ACCOUNT_ID
+
 phases:
   install:
     runtime-versions:
