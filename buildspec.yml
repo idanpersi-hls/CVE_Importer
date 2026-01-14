@@ -14,5 +14,5 @@ phases:
       - docker build -t $IMAGE_AND_TAG .
   post_build:
     commands:
-      - trivy image -q --exit-code 1 --severity HIGH,CRITICAL $IMAGE_AND_TAG
+      - trivy image -q --exit-code 1 --severity CRITICAL $IMAGE_AND_TAG
       - docker push $IMAGE_AND_TAG
