@@ -141,12 +141,3 @@ jobs:
           docker run --rm \
           -e SMOKE_TEST=true \
           cve-importer:pr-${{ github.event.pull_request.number }}
-      
-      - name: Send notification to slack
-        uses: slackapi/slack-github-action@v2.1.1
-        with:
-          method: chat.postMessage
-          token: ${{ secrets.SLACK_BOT_TOKEN }}
-          payload: |
-            channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url}}"
