@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from typing import List, Optional
 from contextlib import asynccontextmanager
 import src.sql_db as sql_db
-from pydantic import BaseModel
+from pydantic import BaseModel, configDict
 from datetime import datetime
 
 class CVEResponse(BaseModel):
@@ -11,9 +11,7 @@ class CVEResponse(BaseModel):
     cvss: Optional[float]
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 @asynccontextmanager
