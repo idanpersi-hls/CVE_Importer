@@ -2,73 +2,75 @@ variable "connect_to_rds_sg_id" {
   type = string
   description = "the db's security group needed to connect"
 }
-variable "port" {
-  type = number
-  description = "the port of the db to connect to"
-}
-variable "vpc_id" {
-  type = string
-}
-variable "container_environments" {
-  description = "A list of environment variables to pass to the container"
-  type = list(object({
-    name  = string
-    value = string
-  }))
-  default = []
-}
 variable "private_subnets" {
   type = list(string)
 }
 variable "cluster_name" {
   type = string
 }
-variable "task_family" {
-  type = string
-}
-variable "network_mode" {
-  type = string
-}
-variable "secrets" {
-  type = list(object({
-    name  = string
-    valueFrom = string
-  }))
-  default = []
-  }
-variable "db_instance_arn" {
-  type = string
-}
+
 variable "db_master_user_secret_arn" {
   type = string
 }
-variable "cpu" {
-  type = number
-}
-variable "memory" {
-  type = number
-}
-variable "launch_type" {
+
+variable "logs_aws_region" {
   type = string
 }
-variable "image_repo" {
-  type = string
+
+variable "containers" {
+  description = "List of container definitions"
+  type = list(object({
+    name              = string
+    image             = string
+    cpu               = number
+    memory            = number
+    essential         = bool
+    command           = optional(list(string))
+    environment       = optional(list(object({
+      name  = string
+      value = string
+    })), [])
+    secrets           = optional(list(object({
+      name      = string
+      valueFrom = string
+    })), [])
+    portMappings      = optional(list(object({
+      containerPort = number
+      hostPort      = number
+      protocol      = optional(string, "tcp")
+    })), [])
+  }))
 }
-variable "image_tag" {
-  type = string
+
+variable "services" {
+  description = "List of ECS services to create"
+  type = list(object({
+    name           = string
+    task_definition = string  # Which task to use
+    launch_type = string
+    desired_count  = number
+    deployment_configuration = optional(object({
+      maximum_percent         = number
+      minimum_healthy_percent = number
+    }), {
+      maximum_percent         = 200
+      minimum_healthy_percent = 100
+    })
+  }))
 }
-variable "container_name" {
-  type = string
+
+variable "tasks" {
+  description = "Task definitions with their configurations"
+  type = map(object({
+    family                   = string
+    containers               = list(string)  # container names
+    cpu                      = number
+    memory                   = number
+    requires_compatibilities = list(string)
+    network_mode             = string
+  }))
 }
-variable "service_name" {
-  type = string
-}
-variable "desired_count" {
-  type = number
-}
-variable "num_of_containers" {
-  type = number
-}
-variable "aws_region" {
+
+variable "role_and_policy_prefix" {
   type = string
 }

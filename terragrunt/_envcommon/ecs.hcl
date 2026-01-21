@@ -18,16 +18,8 @@ locals {
 }
 
 inputs = {
-  aws_region = local.aws_region
-  num_of_containers = 2
-  cpu = 256
-  memory = 512
-  cluster_name = "${local.prefix}-cluster"
-  task_family = "${local.prefix}-task-family"
-  service_name = "${local.prefix}-service"
-  container_name = "${local.prefix}-container"
-  network_mode = "awsvpc"
-  launch_type = "FARGATE"
+  logs_aws_region = local.aws_region
   image_repo = local.image_repo
-  desired_count = 1
+  cluster_name = "${local.prefix}-cluster"
+  role_and_policy_prefix = "${local.prefix}-task"
 }
