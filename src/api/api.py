@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from typing import List, Optional
 from contextlib import asynccontextmanager
 import src.sql_db as sql_db
-from pydantic import BaseModel, configDict
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 class CVEResponse(BaseModel):

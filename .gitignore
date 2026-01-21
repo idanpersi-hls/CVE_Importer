@@ -6,3 +6,5 @@ logs/
 cron_docker_options/
 **/__pycache__/
 .pytest_cache/
+**/.terraform**
+**/.terragrunt**
