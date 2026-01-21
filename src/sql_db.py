@@ -20,7 +20,9 @@ def init_connection_pool():
                 connection_pool = psycopg2.pool.SimpleConnectionPool(
                     minconn=2,
                     maxconn=10,
-                    dsn=DB_URL
+                    dsn=DB_URL,
+                    sslmode='require'
+
                 )
                 print(f"Connected to PostgreSQL via {DB_URL}")
             else:   
@@ -31,7 +33,8 @@ def init_connection_pool():
                 port=DB_PORT,
                 database=DB_NAME,
                 user=DB_USER,
-                password=DB_PASSWORD
+                password=DB_PASSWORD,
+                sslmode='require'
             )
                 print(f"Connected to PostgreSQL at {DB_HOST}:{DB_PORT}/{DB_NAME}")
         except psycopg2.Error as e:
