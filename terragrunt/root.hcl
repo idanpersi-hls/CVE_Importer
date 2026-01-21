@@ -4,18 +4,18 @@ locals {
   account_id = local.environment_vars.locals.account_id
   account_name = local.environment_vars.locals.account_name
   aws_region = local.environment_vars.locals.aws_region
-  prefix = "idanpersi-skills-"
+  prefix = local.environment_vars.locals.prefix
 }
 
 remote_state {
   backend = "s3"
   
   config = {
-    bucket = "${local.prefix}terraform-state-${local.account_name}-${local.account_id}"
+    bucket = "${local.prefix}form-state-${local.account_name}-${local.account_id}"
     key = "${path_relative_to_include()}/terraform.tfstate"
     region = local.aws_region
     encrypt = true
-    dynamodb_table = "${local.prefix}terraform-locks-${local.account_name}"
+    dynamodb_table = "${local.prefix}form-locks-${local.account_name}"
     
     s3_bucket_tags = {
       Name = "Terraform State"

@@ -28,24 +28,38 @@ module "db" {
 
     create_db_instance = var.create_db_instance
     create_db_subnet_group = var.create_db_subnet_group
-    vpc_security_group_ids = [aws_security_group.this.id]
+    vpc_security_group_ids = [aws_security_group.rds.id]
 }
 
-resource "aws_security_group" "this" {
-  name =  var.sg_name
+resource "aws_security_group" "rds" {
+  name =  var.rds_security_group_name
   vpc_id      = var.vpc_id
-  description = "SG created to allow ingress to rds only from vpc"
+  description = "SG for the rds"
   tags = {
-    Name = var.sg_name
+    Name = var.rds_security_group_name
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "this" {
-  for_each = toset(var.allowed_cidrs)
-  security_group_id = aws_security_group.this.id
-  
-  cidr_ipv4         = each.value
-  from_port         = var.port
-  ip_protocol       = "tcp"
-  to_port           = var.port
+resource "aws_security_group" "connect_to_rds" {
+  name = var.connect_to_rds_sg_name
+  vpc_id = var.vpc_id
+  description = "SG for resources to cennect to rds"
+  egress {
+    protocol = "-1"
+    from_port = 0
+    to_port = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    "Name" = var.connect_to_rds_sg_name
+  }
+}
+
+resource "aws_security_group_rule" "allow_connection" {
+  type = "ingress"
+  security_group_id = aws_security_group.rds.id
+  from_port = var.port
+  to_port = var.port
+  protocol = "tcp"
+  source_security_group_id = aws_security_group.connect_to_rds.id
 }

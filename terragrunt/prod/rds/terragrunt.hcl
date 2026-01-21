@@ -1,8 +1,3 @@
-include "root" {
-  path = find_in_parent_folders("root.hcl")
-  expose = true
-}
-
 include "envcommon" {
   path   = "${dirname(find_in_parent_folders("root.hcl"))}/_envcommon/rds.hcl"
   expose = true
@@ -23,15 +18,8 @@ terraform {
   source = "${include.envcommon.locals.source_url}"
 }
 
-locals {
-    prefix = include.root.locals.prefix
-    aws_region = include.root.locals.aws_region
-}
-
 inputs = {
-  identifier = "${local.prefix}terra-postgress"
-  sg_name = "${local.prefix}terra-sg"
-  instance_class = "db.m5.large"
+  instance_class = "db.t4g.micro"
   multi_az = true
   backup_retention_period = 7
 
