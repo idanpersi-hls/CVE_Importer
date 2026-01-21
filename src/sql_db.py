@@ -4,7 +4,7 @@ from psycopg2.extras import RealDictCursor
 from datetime import datetime, timezone
 from typing import List, Dict, Optional
 from contextlib import contextmanager
-from src.config import DB_URL, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
+from src.config import DB_URL, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, DB_SSL_MODE
 
 
 # Connection pool (reuses connections for better performance)
@@ -21,7 +21,7 @@ def init_connection_pool():
                     minconn=2,
                     maxconn=10,
                     dsn=DB_URL,
-                    sslmode='require'
+                    sslmode=DB_SSL_MODE
 
                 )
                 print(f"Connected to PostgreSQL via {DB_URL}")
@@ -34,7 +34,7 @@ def init_connection_pool():
                 database=DB_NAME,
                 user=DB_USER,
                 password=DB_PASSWORD,
-                sslmode='require'
+                sslmode=DB_SSL_MODE
             )
                 print(f"Connected to PostgreSQL at {DB_HOST}:{DB_PORT}/{DB_NAME}")
         except psycopg2.Error as e:

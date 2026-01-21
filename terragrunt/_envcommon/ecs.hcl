@@ -6,14 +6,9 @@ locals {
     account_id = local.environment_vars.locals.account_id
     image_repo  = "${local.account_id}.dkr.ecr.${local.aws_region}.amazonaws.com/idanpersi-skills/cve-etl"
     common_env_vars = [
-    {
-      name  = "NVD_API_URL"
-      value = "https://services.nvd.nist.gov/rest/json/cves/2.0"
-    },
-    {
-      name  = "DB_USER"
-      value = "postgres"
-    }
+    { name  = "NVD_API_URL", value = "https://services.nvd.nist.gov/rest/json/cves/2.0" },
+    { name  = "DB_USER", value = "postgres" },
+    { name = "DB_SSL_MODE", value = "require" }
   ]
 }
 
