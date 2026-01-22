@@ -35,8 +35,7 @@ terraform {
 
 locals{
   prefix = include.envcommon.locals.prefix
-  image = "${include.envcommon.locals.image_repo}:44"
-
+  image = "${include.envcommon.locals.image_repo}:45"
 }
 
 inputs = {
