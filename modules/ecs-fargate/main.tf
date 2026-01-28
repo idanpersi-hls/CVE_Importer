@@ -5,12 +5,12 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 resource "aws_ecs_task_definition" "tasks" {
   for_each = var.tasks
 
-  family                   = each.value.family
+  family = each.value.family
   requires_compatibilities = each.value.requires_compatibilities
-  network_mode             = each.value.network_mode
-  cpu                      = each.value.cpu
-  memory                   = each.value.memory
-  execution_role_arn       = aws_iam_role.execution_role.arn
+  network_mode = each.value.network_mode
+  cpu  = each.value.cpu
+  memory  = each.value.memory
+  execution_role_arn = aws_iam_role.execution_role.arn
 
   container_definitions = jsonencode([
     for container_name in each.value.containers :
@@ -57,10 +57,19 @@ resource "aws_ecs_service" "services" {
   deployment_maximum_percent = each.value.deployment_configuration.maximum_percent
   deployment_minimum_healthy_percent = each.value.deployment_configuration.minimum_healthy_percent
 
+  dynamic load_balancer {
+    for_each = try(each.value.load_balancer, null) != null ? [each.value.load_balancer] : []
+      content {
+        target_group_arn = var.alb_target_groups[load_balancer.value.target_group_key].arn
+        container_name = load_balancer.value.container_name
+        container_port = load_balancer.value.container_port
+      }
+  }
+
   network_configuration {
     assign_public_ip = false
-    security_groups  = [var.connect_to_rds_sg_id]
-    subnets          = var.private_subnets
+    security_groups = each.value.security_groups
+    subnets = each.value.private_subnets
   }
 }
 
