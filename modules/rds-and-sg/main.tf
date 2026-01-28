@@ -1,6 +1,6 @@
 module "db" {
     source  = "terraform-aws-modules/rds/aws"
-    version = "7.1.0"
+    version = "~> 7.1"
     engine               = var.engine
     engine_version       = var.engine_version
     family               = var.family
